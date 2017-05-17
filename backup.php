@@ -12,6 +12,8 @@ function backup_dirs($dirs, $destination = "backup_site.zip", $memory = false) {
         return "Path Error";
     if (is_string($destination) && !is_dir(dirname($destination) . DIRECTORY_SEPARATOR))
         mkdir(dirname($destination) . DIRECTORY_SEPARATOR, 0764, true);
+    if (substr($destination, -4) != '.zip')
+        $destination = $destination . '.zip';
     $zip = new ZipArchive();
     $res = $zip->open($destination, ZIPARCHIVE::CREATE);
     if ($res !== true)
