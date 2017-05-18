@@ -19,7 +19,7 @@ class backup_dirs {
         if (version_compare(PHP_VERSION, '5.3.0', '<'))
             return $this->err = "PHP Version not supported (>5.3.0).";
         if (is_string($dirs))
-            $dirs = explode(',', $dirs);
+            $dirs = array($dirs);
         elseif (is_array($dirs))
             $dirs = $dirs;
         else
