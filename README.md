@@ -22,17 +22,23 @@ function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $ind
 $from_dir = "../admin";
 $to_filepath = "../backup_files.zip"; // or "../backup_files.tar"
 $bk = new backup_dirs($from_dir, $to_filepath);
-if($bk->res !== true) echo $bk->err;
-else echo "Done";
+if ($bk->res !== true)
+    echo $bk->err;
+else
+    echo "Done";
 ```
 
 ```php
-$from_dir = array("../admin","../cache","../config"); 
-// Note: With this method, the .tar extension is not supported.
-
-$to_filepath = "../backup_files.zip"; 
+$from_dir = array(
+    "../admin",
+    "../cache",
+    "../config"
+); //With this method, the .tar extension is not supported.
+$to_filepath = "../backup_files.zip";
 $bk = new backup_dirs($from_dir, $to_filepath);
-if($bk->res !== true) echo $bk->err;
-else echo "Done";
+if ($bk->res !== true)
+    echo $bk->err;
+else
+    echo "Done";
 ```
 Required PHP Version > 5.3.0 | PHAR Extension or Zip Extension.
