@@ -1,7 +1,6 @@
 # Backup folders
 
-## Compressing a folder and its subfolders in different formats 
-## (.zip | .tar.gz | .tar.bz2).
+### Compressing a folder and its subfolders in different formats (.zip | .tar.gz | .tar.bz2).
 
 ```php
 function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $index = 9, $memory = false) {}
@@ -17,7 +16,7 @@ function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $ind
 1. $index => Compression index. (Usually no need to modify it) Min 0 | Max 9
 1. $memory => ONLY in case of memory problems, set it to true (It's not miraculous).
 
-## USE
+### USE
 
 ```php
 $from_dir = "../admin";
