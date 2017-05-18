@@ -1,6 +1,7 @@
 # Backup folders
 
-## Compressing a folder and its subfolders in different formats (.zip | .tar.gz | .tar.bz2).
+## Compressing a folder and its subfolders in different formats 
+## (.zip | .tar.gz | .tar.bz2).
 
 ```php
 function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $index = 9, $memory = false) {}
