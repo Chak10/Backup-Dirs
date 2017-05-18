@@ -1,5 +1,7 @@
 <?php
 
+var_dump(new backup_dirs("C:\wamp64\www\admin", "C:\wamp64\www\\testt2.zip"));
+
 class backup_dirs {
     
     function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $index = 9, $memory = false) {
@@ -47,7 +49,7 @@ class backup_dirs {
     function zip($dirs, $destination, $compr) {
         try {
             $fname = realpath(dirname($destination)) . DIRECTORY_SEPARATOR . basename($destination);
-            $zip = new PharData($fname, FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS, basename($destination), Phar::ZIP);
+            $zip = new PharData($fname, FilesystemIterator::SKIP_DOTS, basename($destination), Phar::ZIP);
             $count = count($dirs);
             foreach ($dirs as $source) {
                 if (!file_exists($source)) {
@@ -138,8 +140,6 @@ class backup_dirs {
     }
     
     function tar($dirs, $destination, $compr, $index) {
-        if (!class_exists('Phar'))
-            return "Extension .tar not supported";
         try {
             if (is_int($index) === false || $index > 9 || $index < 1)
                 $index = 9;
