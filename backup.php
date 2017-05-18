@@ -1,20 +1,20 @@
 <?php
 
 class backup_dirs {
-   
-   /**  
     
-       GNU GENERAL PUBLIC LICENSE
-       Version 3, 29 June 2007
-       Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
-       Everyone is permitted to copy and distribute verbatim copies
-       of this license document, but changing it is not allowed.
-   
-   **/
-	
+    /**  
+    
+    GNU GENERAL PUBLIC LICENSE
+    Version 3, 29 June 2007
+    Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+    Everyone is permitted to copy and distribute verbatim copies
+    of this license document, but changing it is not allowed.
+    
+    **/
+    
     public $res;
     public $err;
-	
+    
     function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $index = 9, $memory = false) {
         if (version_compare(PHP_VERSION, '5.3.0', '<'))
             return $this->err = "PHP Version not supported (>5.3.0).";
