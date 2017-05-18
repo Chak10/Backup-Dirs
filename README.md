@@ -27,7 +27,9 @@ else echo "Done";
 ```
 
 ```php
-$from_dir = array("../admin","../cache","../config"); // Note : With this method, the .tar extension is not supported.
+$from_dir = array("../admin","../cache","../config"); 
+// Note: With this method, the .tar extension is not supported.
+
 $to_filepath = "../backup_files.zip"; 
 $bk = new backup_dirs($from_dir, $to_filepath);
 if($bk->res !== true) echo $bk->err;
