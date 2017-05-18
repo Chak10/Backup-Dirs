@@ -144,7 +144,7 @@ class backup_dirs {
             if (is_int($index) === false || $index > 9 || $index < 1)
                 $index = 9;
             $fname = realpath(dirname($destination)) . DIRECTORY_SEPARATOR . basename($destination);
-            $tar = new PharData($fname, FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS, basename($destination), Phar::TAR);
+            $tar = new PharData($fname, FilesystemIterator::SKIP_DOTS, basename($destination), Phar::TAR);
             $count = count($dirs);
             foreach ($dirs as $source) {
                 if (!file_exists($source)) {
