@@ -1,7 +1,5 @@
 <?php
 
-var_dump(new backup_dirs("C:\wamp64\www\admin", "C:\wamp64\www\\testt2.zip"));
-
 class backup_dirs {
     
     function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $index = 9, $memory = false) {
