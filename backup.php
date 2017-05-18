@@ -2,6 +2,9 @@
 
 class backup_dirs {
     
+	public $res;
+	public $err;
+	
     function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $index = 9, $memory = false) {
         if (version_compare(PHP_VERSION, '5.3.0', '<'))
             return $this->err = "PHP Version not supported (>5.3.0).";
@@ -44,7 +47,7 @@ class backup_dirs {
         }
     }
     
-    function zip($dirs, $destination, $compr) {
+    public function zip($dirs, $destination, $compr) {
         try {
             $fname = realpath(dirname($destination)) . DIRECTORY_SEPARATOR . basename($destination);
             $zip = new PharData($fname, FilesystemIterator::SKIP_DOTS, basename($destination), Phar::ZIP);
@@ -82,7 +85,7 @@ class backup_dirs {
             return $this->err = "Not exists: " . implode('; ', $err);
     }
     
-    function zip_2($dirs, $destination, $memory) {
+    public function zip_2($dirs, $destination, $memory) {
         $zip = new ZipArchive();
         $res = $zip->open($destination, ZIPARCHIVE::CREATE);
         if ($res !== true)
@@ -137,7 +140,7 @@ class backup_dirs {
             return $this->err = "Not exists: " . implode('; ', $err);
     }
     
-    function tar($dirs, $destination, $compr, $index) {
+    public function tar($dirs, $destination, $compr, $index) {
         try {
             if (is_int($index) === false || $index > 9 || $index < 1)
                 $index = 9;
