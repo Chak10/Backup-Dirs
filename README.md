@@ -7,7 +7,7 @@ function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $ind
 ```
 
 
-1. $dirs => The folder you need to backup.
+1. $dirs (String or Array) => The folder you need to backup. (Even more folders)
 1. $destination => Destination folder.
 1. $comp => Compression type. (Usually no need to modify it)
 	- Zlib => gz
@@ -25,5 +25,19 @@ $bk = new backup_dirs($from_dir, $to_filepath);
 if($bk->res !== true) echo $bk->err;
 else echo "Done";
 ```
+```php
+$from_dir = "../admin,../cache,../config;
+$to_filepath = "../backup_files.zip"; // or "../backup_files.tar"
+$bk = new backup_dirs($from_dir, $to_filepath);
+if($bk->res !== true) echo $bk->err;
+else echo "Done";
+```
 
+```php
+$from_dir = array("../admin","../cache","../config");
+$to_filepath = "../backup_files.zip"; // or "../backup_files.tar"
+$bk = new backup_dirs($from_dir, $to_filepath);
+if($bk->res !== true) echo $bk->err;
+else echo "Done";
+```
 Required PHP Version > 5.3.0 | PHAR Extension or Zip Extension.
