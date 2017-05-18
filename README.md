@@ -25,13 +25,6 @@ $bk = new backup_dirs($from_dir, $to_filepath);
 if($bk->res !== true) echo $bk->err;
 else echo "Done";
 ```
-```php
-$from_dir = "../admin,../cache,../config;
-$to_filepath = "../backup_files.zip"; // or "../backup_files.tar"
-$bk = new backup_dirs($from_dir, $to_filepath);
-if($bk->res !== true) echo $bk->err;
-else echo "Done";
-```
 
 ```php
 $from_dir = array("../admin","../cache","../config");
