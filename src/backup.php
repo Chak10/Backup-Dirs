@@ -19,7 +19,7 @@ class backup_dirs {
         if (version_compare(PHP_VERSION, '5.3.0', '<'))
             return $this->err = "PHP Version not supported (>5.3.0).";
         if (is_string($dirs))
-            $dirs = array($dirs);
+            $dirs = $dirs;
         elseif (is_array($dirs))
             $dirs = $dirs;
         else
@@ -28,15 +28,15 @@ class backup_dirs {
             mkdir(dirname($destination) . DIRECTORY_SEPARATOR, 0764, true);
         switch (pathinfo($destination, PATHINFO_EXTENSION)) {
             case 'zip':
-                if (class_exists('PharData'))
+                if (class_exists('PharData') && is_string($dirs))
                     return $this->res = $this->zip($dirs, $destination, $comp);
-                elseif (extension_loaded('zip'))
+                elseif (extension_loaded('zip') && is_array($dirs) || is_string($dirs))
                     return $this->res = $this->zip_2($dirs, $destination, $memory);
                 else
                     return $this->res = "Zip not supported.";
                 break;
             case 'tar':
-                if (class_exists('PharData')) {
+                if (class_exists('PharData') && is_string($dirs)) {
                     $res = $this->tar($dirs, $destination, $comp, $index);
                     if ($comp == 'gz' || $comp == 'bz2')
                         unlink(realpath($destination));
@@ -47,12 +47,12 @@ class backup_dirs {
                 break;
             default:
                 $destination = $destination . '.zip';
-                if (class_exists('PharData'))
+                if (class_exists('PharData') && is_string($dirs))
                     return $this->res = $this->zip($dirs, $destination, $comp);
-                elseif (extension_loaded('zip'))
+                elseif (extension_loaded('zip') && is_array($dirs) || is_string($dirs))
                     return $this->res = $this->zip_2($dirs, $destination, $memory);
                 else
-                    return $this->res = "Zip Extension not found.";
+                    return $this->res = "Zip not supported.";
                 break;
         }
     }
@@ -61,27 +61,18 @@ class backup_dirs {
         try {
             $fname = realpath(dirname($destination)) . DIRECTORY_SEPARATOR . basename($destination);
             $zip = new PharData($fname, FilesystemIterator::SKIP_DOTS, basename($destination), Phar::ZIP);
-            $count = count($dirs);
-            foreach ($dirs as $source) {
-                if (!file_exists($source)) {
-                    if (!isset($err))
-                        $err = array(
-                            $source
-                        );
-                    else
-                        $err[] = $source;
-                    continue;
+            $source = realpath($source);
+            if (is_dir($source) === true) {
+                $zip->buildFromDirectory($source);
+                if ($compr == 'gz') {
+                    $zip->compressFiles(Phar::GZ);
+                } elseif ($compr == 'bz2') {
+                    $zip->compressFiles(Phar::BZ2);
                 }
-                $source = realpath($source);
-                if (is_dir($source) === true) {
-                    $zip->buildFromDirectory($source);
-                    if ($compr == 'gz') {
-                        $zip->compressFiles(Phar::GZ);
-                    } elseif ($compr == 'bz2') {
-                        $zip->compressFiles(Phar::BZ2);
-                    }
-                }
+            } else {
+                return $this->err = "Not exists: " . $source;
             }
+            
         }
         catch (UnexpectedValueException $e) {
             return $this->err = 'Could not open ' . basename($destination);
@@ -89,10 +80,7 @@ class backup_dirs {
         catch (BadMethodCallException $e) {
             return $this->err = 'Technically, this cannot happen';
         }
-        if (!isset($err))
-            return true;
-        else
-            return $this->err = "Not exists: " . implode('; ', $err);
+        return true;
     }
     
     public function zip_2($dirs, $destination, $memory) {
@@ -156,29 +144,20 @@ class backup_dirs {
                 $index = 9;
             $fname = realpath(dirname($destination)) . DIRECTORY_SEPARATOR . basename($destination);
             $tar = new PharData($fname, FilesystemIterator::SKIP_DOTS, basename($destination), Phar::TAR);
-            $count = count($dirs);
-            foreach ($dirs as $source) {
-                if (!file_exists($source)) {
-                    if (!isset($err))
-                        $err = array(
-                            $source
-                        );
-                    else
-                        $err[] = $source;
-                    continue;
+            $source = realpath($source);
+            if (is_dir($source) === true) {
+                $tar->buildFromDirectory($source);
+                if ($compr == 'gz') {
+                    file_put_contents($fname . '.gz', gzencode(file_get_contents($fname), $index, FORCE_GZIP));
+                } elseif ($compr == 'bz2') {
+                    file_put_contents($fname . '.bz2', bzcompress(file_get_contents($fname), $index));
+                } elseif ($compr == 'deflate') {
+                    file_put_contents($fname . '.gz', gzencode(file_get_contents($fname), $index, FORCE_DEFLATE));
                 }
-                $source = realpath($source);
-                if (is_dir($source) === true) {
-                    $tar->buildFromDirectory($source);
-                    if ($compr == 'gz') {
-                        file_put_contents($fname . '.gz', gzencode(file_get_contents($fname), $index, FORCE_GZIP));
-                    } elseif ($compr == 'bz2') {
-                        file_put_contents($fname . '.bz2', bzcompress(file_get_contents($fname), $index));
-                    } elseif ($compr == 'deflate') {
-                        file_put_contents($fname . '.gz', gzencode(file_get_contents($fname), $index, FORCE_DEFLATE));
-                    }
-                }
+            } else {
+                return $this->err = "Not exists: " . $source;
             }
+            
         }
         catch (UnexpectedValueException $e) {
             return $this->err = 'Could not open ' . basename($destination);
@@ -186,10 +165,9 @@ class backup_dirs {
         catch (BadMethodCallException $e) {
             return $this->err = 'Technically, this cannot happen';
         }
-        if (!isset($err))
-            return true;
-        else
-            return $this->err = "Not exists: " . implode('; ', $err);
+        
+        return true;
+        
     }
     
 }
