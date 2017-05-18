@@ -2,8 +2,8 @@
 
 class backup_dirs {
     
-	public $res;
-	public $err;
+    public $res;
+    public $err;
 	
     function __construct($dirs, $destination = "backup_site.zip", $comp = 'gz', $index = 9, $memory = false) {
         if (version_compare(PHP_VERSION, '5.3.0', '<'))
