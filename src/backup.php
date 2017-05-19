@@ -61,7 +61,7 @@ class backup_dirs {
         try {
             $fname = realpath(dirname($destination)) . DIRECTORY_SEPARATOR . basename($destination);
             $zip = new PharData($fname, FilesystemIterator::SKIP_DOTS, basename($destination), Phar::ZIP);
-            $source = realpath($source);
+            $source = realpath($dirs);
             if (is_dir($source) === true) {
                 $zip->buildFromDirectory($source);
                 if ($compr == 'gz') {
@@ -144,7 +144,7 @@ class backup_dirs {
                 $index = 9;
             $fname = realpath(dirname($destination)) . DIRECTORY_SEPARATOR . basename($destination);
             $tar = new PharData($fname, FilesystemIterator::SKIP_DOTS, basename($destination), Phar::TAR);
-            $source = realpath($source);
+            $source = realpath($dirs);
             if (is_dir($source) === true) {
                 $tar->buildFromDirectory($source);
                 if ($compr == 'gz') {
